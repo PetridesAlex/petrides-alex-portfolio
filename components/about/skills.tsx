@@ -103,14 +103,18 @@ const cardVariants = {
 function SkillGroupCard({
   group,
   animate,
+  forPrint = false,
 }: {
   group: SkillGroup;
   animate: boolean;
+  forPrint?: boolean;
 }): ReactNode {
   const Icon = group.icon;
 
   const card = (
-    <div className="border-foreground/8 hover:border-foreground/15 group relative h-full overflow-hidden rounded-3xl border bg-background p-5 transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:shadow-md sm:p-6">
+    <div
+      className={`border-foreground/8 relative h-full overflow-hidden rounded-3xl border bg-background p-5 sm:p-6 ${forPrint ? "print-block-item rounded-xl border-foreground/10 p-4" : "hover:border-foreground/15 group transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:shadow-md"}`}
+    >
       <div
         aria-hidden="true"
         className="bg-foreground/3 pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100"
@@ -159,13 +163,17 @@ function SkillGroupCard({
   );
 }
 
-export function Skills(): ReactNode {
+export function Skills({ forPrint = false }: { forPrint?: boolean }): ReactNode {
   const reducedMotion = useReducedMotion();
-  const animate = !reducedMotion;
+  const animate = !reducedMotion && !forPrint;
 
   return (
-    <section className="flex flex-col gap-5">
-      <div className="border-foreground/8 flex flex-col gap-1.5 border-b pb-4">
+    <section
+      className={`flex flex-col gap-5 ${forPrint ? "print-block print-block--allow-break" : ""}`}
+    >
+      <div
+        className={`border-foreground/8 flex flex-col gap-1.5 border-b pb-4 ${forPrint ? "print-section-head" : ""}`}
+      >
         <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/40">
           Technical expertise
         </p>
@@ -193,7 +201,12 @@ export function Skills(): ReactNode {
       ) : (
         <ul className="grid gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3">
           {SKILL_GROUPS.map((group) => (
-            <SkillGroupCard key={group.id} group={group} animate={false} />
+            <SkillGroupCard
+              key={group.id}
+              group={group}
+              animate={false}
+              forPrint={forPrint}
+            />
           ))}
         </ul>
       )}

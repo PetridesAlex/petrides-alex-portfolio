@@ -2,6 +2,7 @@
 
 import { DottedPattern } from "@/components/ui/dotted-pattern";
 import { motion, useReducedMotion } from "motion/react";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
@@ -14,6 +15,7 @@ const STORAGE_KEY = "alex-petrides-portfolio-preload";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function PreloadSplash(): ReactNode {
+  const pathname = usePathname();
   const reducedMotion = useReducedMotion();
   const [ready, setReady] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -21,10 +23,16 @@ export function PreloadSplash(): ReactNode {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    if (pathname === "/print") {
+      setVisible(false);
+      setReady(true);
+      return;
+    }
+
     const shouldShow = !sessionStorage.getItem(STORAGE_KEY);
     setVisible(shouldShow);
     setReady(true);
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (!visible) {

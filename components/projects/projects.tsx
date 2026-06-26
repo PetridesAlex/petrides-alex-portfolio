@@ -103,12 +103,14 @@ export type ProjectsProps = {
   withHeadline?: boolean;
   viewMoreVisible?: boolean;
   embedded?: boolean;
+  forPrint?: boolean;
 };
 
 export function Projects({
   withHeadline = false,
   viewMoreVisible = false,
   embedded = false,
+  forPrint = false,
 }: ProjectsProps): ReactNode {
   const items = viewMoreVisible ? PROJECTS.slice(0, 4) : PROJECTS;
 
@@ -129,9 +131,20 @@ export function Projects({
         </FadeIn>
       ) : null}
 
-      <div className="columns-1 gap-6 md:columns-2 md:gap-7">
+      <div
+        className={
+          forPrint
+            ? "flex flex-col gap-4"
+            : "columns-1 gap-6 md:columns-2 md:gap-7"
+        }
+      >
         {items.map((project, index) => (
-          <ProjectCard key={project.id} project={project} index={index} />
+          <ProjectCard
+            key={project.id}
+            project={project}
+            index={index}
+            forPrint={forPrint}
+          />
         ))}
       </div>
 
@@ -166,13 +179,17 @@ export function Projects({
 function ProjectCard({
   project,
   index,
+  forPrint = false,
 }: {
   project: Project;
   index: number;
+  forPrint?: boolean;
 }): ReactNode {
   const Icon = project.icon;
   const card = (
-    <article className="project-card flex cursor-pointer flex-col gap-4 rounded-3xl border border-foreground/8 bg-background p-3 sm:p-3.5">
+    <article
+      className={`project-card flex flex-col gap-3 rounded-2xl border border-foreground/10 bg-background p-3 ${forPrint ? "print-block-item" : "cursor-pointer gap-4 rounded-3xl border-foreground/8 p-3 sm:p-3.5"}`}
+    >
       <header className="flex items-center justify-between gap-2.5 px-1 pt-2">
         <div className="flex min-w-0 items-center gap-2.5">
           <span className="border-foreground/10 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border bg-background">
@@ -188,8 +205,8 @@ function ProjectCard({
       </header>
 
       <div
-        className="project-card__image ring-foreground/5 relative w-full overflow-hidden rounded-2xl bg-foreground/5 ring-1"
-        style={{ aspectRatio: project.imageRatio }}
+        className={`project-card__image ring-foreground/5 relative w-full overflow-hidden rounded-2xl bg-foreground/5 ring-1 ${forPrint ? "max-h-44" : ""}`}
+        style={{ aspectRatio: forPrint ? "16/9" : project.imageRatio }}
       >
         <div className="project-card__image-inner">
           <Image
@@ -217,6 +234,10 @@ function ProjectCard({
       </p>
     </article>
   );
+
+  if (forPrint) {
+    return <div>{card}</div>;
+  }
 
   return (
     <FadeIn

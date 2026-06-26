@@ -69,12 +69,46 @@ function CertificationCard({
   index,
   onExpand,
   animate,
+  forPrint = false,
 }: {
   certification: Certification;
   index: number;
   onExpand: (id: string) => void;
   animate: boolean;
+  forPrint?: boolean;
 }): ReactNode {
+  if (forPrint) {
+    return (
+      <article className="print-block-item overflow-hidden rounded-xl border border-foreground/10 bg-background">
+        <div className="relative h-40 w-full overflow-hidden border-b border-foreground/8 bg-white">
+          <Image
+            src={certification.image}
+            alt={certification.imageAlt}
+            fill
+            sizes="400px"
+            className="object-contain p-2"
+          />
+        </div>
+        <div className="flex flex-col gap-2 p-4">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-foreground/45">
+              {certification.issuer}
+            </p>
+            <span className="text-[10px] tracking-tight text-foreground/45">
+              {certification.period}
+            </span>
+          </div>
+          <h4 className="font-serif text-[1.05rem] font-medium tracking-tight text-foreground">
+            {certification.title}
+          </h4>
+          <p className="text-[12px] leading-relaxed text-foreground/60">
+            {certification.subtitle}
+          </p>
+        </div>
+      </article>
+    );
+  }
+
   const card = (
     <article className="border-foreground/8 hover:border-foreground/15 group relative h-full overflow-hidden rounded-4xl border bg-background p-1.5 shadow-sm transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:shadow-md">
       <div
@@ -97,7 +131,10 @@ function CertificationCard({
             className="object-contain p-3 transition-transform duration-500 ease-out group-hover:scale-[1.02] sm:p-4"
             loading="lazy"
           />
-          <span className="border-foreground/10 absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-xl border bg-background/90 text-foreground/70 backdrop-blur-sm transition-colors duration-300 group-hover:bg-foreground group-hover:text-background">
+          <span
+            data-print-hide
+            className="border-foreground/10 absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-xl border bg-background/90 text-foreground/70 backdrop-blur-sm transition-colors duration-300 group-hover:bg-foreground group-hover:text-background"
+          >
             <Expand className="h-4 w-4" aria-hidden="true" />
           </span>
         </div>
@@ -223,17 +260,25 @@ function CertificationLightbox({
   );
 }
 
-export function Certifications(): ReactNode {
+export function Certifications({
+  forPrint = false,
+}: {
+  forPrint?: boolean;
+}): ReactNode {
   const reducedMotion = useReducedMotion();
-  const animate = !reducedMotion;
+  const animate = !reducedMotion && !forPrint;
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const activeCertification = CERTIFICATIONS.find((item) => item.id === activeId);
   const closeLightbox = useCallback(() => setActiveId(null), []);
 
   return (
-    <section className="flex flex-col gap-5">
-      <div className="border-foreground/8 flex flex-col gap-1.5 border-b pb-4">
+    <section
+      className={`flex flex-col gap-5 ${forPrint ? "print-block print-block--allow-break" : ""}`}
+    >
+      <div
+        className={`border-foreground/8 flex flex-col gap-1.5 border-b pb-4 ${forPrint ? "print-section-head" : ""}`}
+      >
         <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/40">
           Credentials
         </p>
@@ -280,20 +325,23 @@ export function Certifications(): ReactNode {
               index={index}
               onExpand={setActiveId}
               animate={false}
+              forPrint={forPrint}
             />
           ))}
         </div>
       )}
 
-      <AnimatePresence>
-        {activeCertification ? (
-          <CertificationLightbox
-            key={activeCertification.id}
-            certification={activeCertification}
-            onClose={closeLightbox}
-          />
-        ) : null}
-      </AnimatePresence>
+      {!forPrint ? (
+        <AnimatePresence>
+          {activeCertification ? (
+            <CertificationLightbox
+              key={activeCertification.id}
+              certification={activeCertification}
+              onClose={closeLightbox}
+            />
+          ) : null}
+        </AnimatePresence>
+      ) : null}
     </section>
   );
 }

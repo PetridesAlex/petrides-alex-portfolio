@@ -111,13 +111,17 @@ function EducationCard({ entry }: { entry: Entry }): ReactNode {
   );
 }
 
-export function Education(): ReactNode {
+export function Education({ forPrint = false }: { forPrint?: boolean }): ReactNode {
   const reducedMotion = useReducedMotion();
-  const animate = !reducedMotion;
+  const animate = !reducedMotion && !forPrint;
 
   return (
-    <section className="flex flex-col gap-5">
-      <div className="border-foreground/8 flex flex-col gap-1.5 border-b pb-4">
+    <section
+      className={`flex flex-col gap-5 ${forPrint ? "print-block print-block--allow-break" : ""}`}
+    >
+      <div
+        className={`border-foreground/8 flex flex-col gap-1.5 border-b pb-4 ${forPrint ? "print-section-head" : ""}`}
+      >
         <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/40">
           Qualifications
         </p>
@@ -147,7 +151,10 @@ export function Education(): ReactNode {
       ) : (
         <ul className="flex flex-col gap-3">
           {ENTRIES.map((entry) => (
-            <li key={entry.id} className="list-none">
+            <li
+              key={entry.id}
+              className={forPrint ? "print-block-item list-none" : "list-none"}
+            >
               <EducationCard entry={entry} />
             </li>
           ))}

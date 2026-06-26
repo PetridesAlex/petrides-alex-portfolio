@@ -1,5 +1,6 @@
 "use client";
 
+import { DownloadPdfButton } from "@/components/layout/download-pdf-button";
 import { Moon, Sun } from "lucide-react";
 import { motion } from "motion/react";
 import { useTheme } from "next-themes";
@@ -152,7 +153,7 @@ export function Nav(): ReactNode {
   return (
     <nav
       aria-label="Primary"
-      className="fixed left-1/2 top-6 z-50 -translate-x-1/2"
+      className="no-print fixed left-1/2 top-6 z-50 -translate-x-1/2"
     >
       <div className="flex items-center gap-1 rounded-full bg-background p-1.5 shadow-sm border border-foreground/8">
         <ul ref={listRef} className="relative flex items-center gap-1">
@@ -199,6 +200,7 @@ export function Nav(): ReactNode {
             );
           })}
         </ul>
+        <DownloadPdfButton />
         <NavThemeToggle />
       </div>
     </nav>

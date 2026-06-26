@@ -217,3 +217,235 @@ html[data-theme-anim="1"]::view-transition-new(root) {
 .project-card:hover .project-card__image-inner {
   transform: scale(1.06);
 }
+
+@media print {
+  @page {
+    margin: 14mm 12mm;
+    size: A4;
+  }
+
+  :root,
+  .dark {
+    --background: #ffffff;
+    --foreground: #0a0a0a;
+    --muted: #f5f5f5;
+    --muted-foreground: #525252;
+    --border: #d4d4d4;
+    --frame: #ffffff;
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0a0a0a !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .no-print,
+  .print-hide-portrait,
+  [data-print-hide],
+  .site-frame,
+  .site-corner,
+  .skip-to-content {
+    display: none !important;
+  }
+
+  .print-document {
+    max-width: 100% !important;
+  }
+
+  .print-document section {
+    padding-top: 0 !important;
+  }
+
+  .print-document .pt-44,
+  .print-document .sm\:pt-56,
+  .print-document .pt-40,
+  .print-document .sm\:pt-44 {
+    padding-top: 0 !important;
+  }
+
+  .print-document .pb-24,
+  .print-document .sm\:pb-32,
+  .print-document .my-12,
+  .print-document .sm\:my-20 {
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .print-document .gap-12,
+  .print-document .sm\:gap-14,
+  .print-document .gap-10,
+  .print-document .sm\:gap-12 {
+    gap: 1.75rem !important;
+  }
+
+  .print-page-break {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  .print-avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-block {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 1.25rem;
+  }
+
+  .print-block--allow-break {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  .print-block--allow-break > .print-section-head {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .print-block-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-section-head {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .print-section-head + * {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+
+  .print-contact-item svg,
+  .print-document svg {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    color: #0a0a0a !important;
+    stroke: #0a0a0a !important;
+  }
+
+  .print-document .rounded-4xl,
+  .print-document .rounded-3xl,
+  .print-document .rounded-2xl {
+    border-radius: 12px !important;
+  }
+
+  .print-document .columns-1,
+  .print-document [class*="md:columns-2"] {
+    column-count: 1 !important;
+  }
+
+  .print-document .md\:grid-cols-2,
+  .print-document .sm\:grid-cols-2,
+  .print-document .lg\:grid-cols-3,
+  .print-document .xl\:grid-cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .print-document .md\:grid-cols-\[1\.2fr_1fr\] {
+    grid-template-columns: 1fr !important;
+  }
+
+  .print-document .bg-foreground.text-background,
+  .print-document blockquote.bg-foreground,
+  .print-document header.bg-foreground,
+  .print-document .bg-foreground {
+    background: #f5f5f5 !important;
+    color: #0a0a0a !important;
+    border-color: #d4d4d4 !important;
+  }
+
+  .print-document .text-background,
+  .print-document [class*="text-background"] {
+    color: #0a0a0a !important;
+  }
+
+  .print-document [class*="border-background"] {
+    border-color: #d4d4d4 !important;
+  }
+
+  .print-document [class*="bg-background/"] {
+    background: #fafafa !important;
+  }
+
+  .print-document * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  .print-document *:not(img):not(svg) {
+    transform: none !important;
+  }
+
+  .print-document img {
+    max-width: 100% !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-document .aspect-\[4\/3\] {
+    max-height: 220px !important;
+    aspect-ratio: 4 / 3 !important;
+  }
+
+  .print-document [style*="opacity"] {
+    opacity: 1 !important;
+  }
+
+  .print-document [style*="filter"] {
+    filter: none !important;
+  }
+
+  .print-document a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+
+  .print-document a[href]::after {
+    content: "" !important;
+  }
+
+  .print-document button {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    cursor: default !important;
+  }
+
+  .print-document .project-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 1rem !important;
+  }
+
+  .print-document .grid > *,
+  .print-document li:not(.print-block-item) {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-document h1,
+  .print-document h2,
+  .print-document h3,
+  .print-document h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .print-document p,
+  .print-document li,
+  .print-document dd {
+    orphans: 3;
+    widows: 3;
+  }
+}

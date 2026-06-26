@@ -19,6 +19,7 @@ export function ContactCard(): ReactNode {
           <div className="relative w-full overflow-hidden rounded-[1.6rem]">
             <div
               aria-hidden="true"
+              data-print-hide
               className="pointer-events-none absolute inset-0 opacity-45 dark:opacity-25"
               style={{
                 WebkitMaskImage: CARD_FADE_MASK,
@@ -37,7 +38,9 @@ export function ContactCard(): ReactNode {
                   Full-stack developer based in Cyprus. Open to roles,
                   collaborations, and professional enquiries.
                 </p>
-                <ContactCardCtas />
+                <div data-print-hide>
+                  <ContactCardCtas />
+                </div>
               </div>
 
               <div className="border-foreground/8 flex flex-col items-center justify-center gap-6 rounded-[1.1rem] border bg-background p-6 sm:p-8">

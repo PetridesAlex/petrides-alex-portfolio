@@ -169,9 +169,32 @@ const itemVariants = {
   },
 };
 
-function ProfileOverview(): ReactNode {
+function ProfileOverview({ forPrint = false }: { forPrint?: boolean }): ReactNode {
   const reducedMotion = useReducedMotion();
-  const animate = !reducedMotion;
+  const animate = !reducedMotion && !forPrint;
+
+  if (forPrint) {
+    return (
+      <div className="rounded-xl border border-foreground/10 bg-foreground/[0.02] px-5 py-5">
+        <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/45">
+          Professional summary
+        </p>
+        <p className="mt-3 text-[14px] leading-[1.7] tracking-tight text-foreground/80">
+          {PROFILE_SUMMARY}
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2 border-t border-foreground/10 pt-4">
+          {PROFILE_TRAITS.map((trait) => (
+            <span
+              key={trait}
+              className="rounded-full border border-foreground/10 px-3 py-1 text-[12px] tracking-tight text-foreground/70"
+            >
+              {trait}
+            </span>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   const card = (
     <div className="relative w-full overflow-hidden rounded-4xl border border-foreground/8 bg-background p-1.5 shadow-sm">
@@ -275,9 +298,13 @@ function RoleCard({ role }: { role: Role }): ReactNode {
   );
 }
 
-export function CareerBackground(): ReactNode {
+export function CareerBackground({
+  forPrint = false,
+}: {
+  forPrint?: boolean;
+}): ReactNode {
   const reducedMotion = useReducedMotion();
-  const animate = !reducedMotion;
+  const animate = !reducedMotion && !forPrint;
 
   const timeline = (
     <ul className="relative flex flex-col gap-4">
@@ -302,6 +329,89 @@ export function CareerBackground(): ReactNode {
       ))}
     </ul>
   );
+
+  if (forPrint) {
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="print-block">
+          <div className="print-section-head mb-5 flex flex-col gap-1.5 border-b border-foreground/10 pb-4">
+            <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/40">
+              Background
+            </p>
+            <h3 className="font-serif text-[1.35rem] font-medium tracking-tight text-foreground">
+              Profile overview
+            </h3>
+          </div>
+          <ProfileOverview forPrint />
+        </div>
+
+        <div className="print-block print-block--allow-break">
+          <div className="print-section-head mb-4 flex flex-col gap-1">
+            <h4 className="text-[15px] font-semibold tracking-tight text-foreground">
+              Professional experience
+            </h4>
+            <p className="text-[14px] tracking-tight text-foreground/55">
+              Sales, hospitality, travel, and event operations across Cyprus and
+              Europe.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3">
+            {ROLES.map((role) => (
+              <div key={role.id} className="print-block-item">
+                <RoleCard role={role} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="print-block print-block--allow-break">
+          <div className="print-section-head mb-4 flex flex-col gap-1">
+            <h4 className="text-[15px] font-semibold tracking-tight text-foreground">
+              Core competencies
+            </h4>
+          </div>
+          <div className="grid gap-2.5 sm:grid-cols-2">
+            {COMPETENCIES.map((group) => (
+              <div
+                key={group.title}
+                className="print-block-item rounded-xl border border-foreground/10 px-4 py-3"
+              >
+                <p className="text-[14px] font-semibold tracking-tight text-foreground">
+                  {group.title}
+                </p>
+                <ul className="mt-2 flex flex-col gap-1.5">
+                  {group.items.map((item) => (
+                    <li
+                      key={item}
+                      className="text-[12px] leading-relaxed tracking-tight text-foreground/60"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="print-block">
+          <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-foreground/40">
+            Interests
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {INTERESTS.map((interest) => (
+              <span
+                key={interest}
+                className="rounded-full border border-foreground/10 px-3 py-1 text-[12px] tracking-tight text-foreground/70"
+              >
+                {interest}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <section className="flex flex-col gap-8">

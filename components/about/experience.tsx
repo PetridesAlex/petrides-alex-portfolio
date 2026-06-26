@@ -128,10 +128,16 @@ function ExperienceCard({ entry }: { entry: Entry }): ReactNode {
   );
 }
 
-export function Experience(): ReactNode {
-  const [open, setOpen] = useState(false);
+export function Experience({
+  defaultExpanded = false,
+  forPrint = false,
+}: {
+  defaultExpanded?: boolean;
+  forPrint?: boolean;
+}): ReactNode {
+  const [open, setOpen] = useState(defaultExpanded);
   const reducedMotion = useReducedMotion();
-  const animate = !reducedMotion;
+  const animate = !reducedMotion && !forPrint;
   const collapsedHeight =
     Math.floor(COLLAPSED_COUNT) * ROW_HEIGHT +
     Math.floor(COLLAPSED_COUNT) * ROW_GAP +
@@ -142,7 +148,7 @@ export function Experience(): ReactNode {
     <div className="relative">
       <div
         aria-hidden="true"
-        className="bg-foreground/10 absolute bottom-4 left-[23px] top-4 hidden w-px sm:block"
+        className={`bg-foreground/10 absolute bottom-4 left-[23px] top-4 hidden w-px sm:block ${forPrint ? "!hidden" : ""}`}
       />
 
       <ul className="relative flex flex-col gap-3">
@@ -151,11 +157,16 @@ export function Experience(): ReactNode {
 
           if (!animate) {
             return (
-              <li key={`${entry.company}-${entry.period}`} className="relative list-none pl-0 sm:pl-14">
-                <span
-                  aria-hidden="true"
-                  className="border-foreground/15 bg-background absolute left-[18px] top-8 hidden h-2.5 w-2.5 rounded-full border-2 sm:block"
-                />
+              <li
+                key={`${entry.company}-${entry.period}`}
+                className={`relative list-none ${forPrint ? "print-block-item pl-0" : "pl-0 sm:pl-14"}`}
+              >
+                {!forPrint ? (
+                  <span
+                    aria-hidden="true"
+                    className="border-foreground/15 bg-background absolute left-[18px] top-8 hidden h-2.5 w-2.5 rounded-full border-2 sm:block"
+                  />
+                ) : null}
                 {card}
               </li>
             );
@@ -180,8 +191,12 @@ export function Experience(): ReactNode {
   );
 
   return (
-    <section className="flex flex-col gap-5">
-      <div className="border-foreground/8 flex flex-col gap-1.5 border-b pb-4">
+    <section
+      className={`flex flex-col gap-5 ${forPrint ? "print-block print-block--allow-break" : ""}`}
+    >
+      <div
+        className={`border-foreground/8 flex flex-col gap-1.5 border-b pb-4 ${forPrint ? "print-section-head" : ""}`}
+      >
         <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/40">
           Technical delivery
         </p>
@@ -196,10 +211,14 @@ export function Experience(): ReactNode {
 
       <div
         className={`border-foreground/8 relative overflow-hidden rounded-4xl border bg-foreground/2 p-3 sm:p-5 dark:bg-foreground/4 ${
-          open ? "pb-3 sm:pb-5" : "pb-0"
+          forPrint
+            ? "rounded-xl border-foreground/10 bg-transparent p-0"
+            : open
+              ? "pb-3 sm:pb-5"
+              : "pb-0"
         }`}
       >
-        {open ? (
+        {open || defaultExpanded ? (
           animate ? (
             <motion.div
               initial="hidden"
@@ -253,10 +272,11 @@ export function Experience(): ReactNode {
           </>
         )}
 
-        {hiddenCount > 0 && (
+        {hiddenCount > 0 && !defaultExpanded ? (
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
+            data-print-hide
             aria-expanded={open}
             className={`focus-ring text-foreground flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-transparent text-[14px] font-medium tracking-tight transition-colors hover:bg-foreground/5 ${
               open
@@ -274,7 +294,7 @@ export function Experience(): ReactNode {
               <ChevronDown className="h-4 w-4" aria-hidden="true" />
             </motion.span>
           </button>
-        )}
+        ) : null}
       </div>
     </section>
   );

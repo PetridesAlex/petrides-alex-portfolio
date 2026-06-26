@@ -33,10 +33,12 @@ export function Hero(): ReactNode {
               AI-powered automation for businesses that need to scale.
             </p>
 
-            <HeroCtas />
+            <div data-print-hide>
+              <HeroCtas />
+            </div>
           </FadeIn>
 
-          <ScaleUnblur className="flex justify-stretch md:justify-end">
+          <ScaleUnblur className="print-hide-portrait flex justify-stretch md:justify-end">
             <div className="relative aspect-square w-full md:max-w-105 overflow-hidden rounded-4xl border border-foreground/8 bg-background p-1.5 shadow-sm">
               <div className="relative h-full w-full overflow-hidden rounded-[1.6rem]">
                 <PortraitMorph

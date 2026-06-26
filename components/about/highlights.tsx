@@ -119,15 +119,19 @@ function HighlightCard({
   highlight,
   index,
   animate,
+  forPrint = false,
 }: {
   highlight: Highlight;
   index: number;
   animate: boolean;
+  forPrint?: boolean;
 }): ReactNode {
   const Icon = highlight.icon;
 
   const card = (
-    <div className="border-foreground/8 hover:border-foreground/15 group relative h-full overflow-hidden rounded-3xl border bg-background p-5 transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:shadow-md sm:p-6">
+    <div
+      className={`border-foreground/8 relative h-full overflow-hidden rounded-3xl border bg-background p-5 sm:p-6 ${forPrint ? "print-block-item rounded-xl border-foreground/10 p-4" : "hover:border-foreground/15 group transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:shadow-md"}`}
+    >
       <div
         aria-hidden="true"
         className="bg-foreground/3 pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100"
@@ -169,13 +173,17 @@ function HighlightCard({
   );
 }
 
-export function Highlights(): ReactNode {
+export function Highlights({ forPrint = false }: { forPrint?: boolean }): ReactNode {
   const reducedMotion = useReducedMotion();
-  const animate = !reducedMotion;
+  const animate = !reducedMotion && !forPrint;
 
   return (
-    <section className="flex flex-col gap-5">
-      <div className="border-foreground/8 flex flex-col gap-1.5 border-b pb-4">
+    <section
+      className={`flex flex-col gap-5 ${forPrint ? "print-block print-block--allow-break" : ""}`}
+    >
+      <div
+        className={`border-foreground/8 flex flex-col gap-1.5 border-b pb-4 ${forPrint ? "print-section-head" : ""}`}
+      >
         <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/40">
           Track record
         </p>
@@ -213,6 +221,7 @@ export function Highlights(): ReactNode {
               highlight={highlight}
               index={index}
               animate={false}
+              forPrint={forPrint}
             />
           ))}
         </ul>
