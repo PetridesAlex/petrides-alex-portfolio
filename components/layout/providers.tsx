@@ -1,5 +1,6 @@
 "use client";
 
+import { PreloadSplash } from "@/components/layout/preload-splash";
 import { ReducedMotionProvider } from "@/lib/motion";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
 import { ThemeProvider } from "next-themes";
@@ -14,6 +15,7 @@ export function Providers({ children }: { children: ReactNode }): ReactNode {
       disableTransitionOnChange
     >
       <ReducedMotionProvider>
+        <PreloadSplash />
         <SmoothScroll>{children}</SmoothScroll>
       </ReducedMotionProvider>
     </ThemeProvider>
