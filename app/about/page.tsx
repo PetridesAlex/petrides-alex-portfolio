@@ -1,4 +1,5 @@
 import { CareerBackground } from "@/components/about/career-background";
+import { Certifications } from "@/components/about/certifications";
 import { Education } from "@/components/about/education";
 import { Experience } from "@/components/about/experience";
 import { Highlights } from "@/components/about/highlights";
@@ -44,6 +45,7 @@ export default function AboutPage(): ReactNode {
           <div className="flex flex-col gap-12">
             <CareerBackground />
             <Education />
+            <Certifications />
             <Experience />
             <Highlights />
             <Skills />
